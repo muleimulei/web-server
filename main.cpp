@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     listenfd = open_listenfd(argv[1]);
     while(1){
         clientlen = sizeof(clientaddr);
-        connfd = accept(listenfd, (struct sockaddr *)&clientaddr, clientlen);
+        connfd = accept(listenfd, (struct sockaddr *)&clientaddr, &clientlen);
         getnameinfo((struct sockaddr *)&clientaddr, clientlen,hostname, MAXLINE, port, MAXLINE, 0);
         printf("ACCEPT connection from (%s, %s)\n", hostname, port);
         doit(connfd);
@@ -27,4 +27,3 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-

@@ -170,7 +170,7 @@ ssize_t rio_readn(int fd, char *usrbuf, size_t n){
 
 ssize_t rio_writen(int fd, char *usrbuf, size_t n){
     size_t nleft = n;
-    size_t nwritten;
+    ssize_t nwritten;
     char *bufp = usrbuf;
 
     while(nleft>0){
@@ -186,7 +186,5 @@ ssize_t rio_writen(int fd, char *usrbuf, size_t n){
     }
     return n;
 }
-
-
 #endif
 
