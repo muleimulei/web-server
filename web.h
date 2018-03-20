@@ -8,6 +8,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/mman.h>
+#include <stdlib.h>
+#include <sys/wait.h>
 #define MAXLINE 1000
 #define MAXBUF 1000
 
@@ -110,7 +112,19 @@ void serve_static(int fd, char *filename, int filesize){
 }
 
 void serve_dynamic(int fd, char *filename, char *cgiargs){
+    char buf[MAXLINE], *emptylist[]={NULL};
+    // return response header
+    sprintf(buf, "HTTP/1.0 200 0K\r\n");
+    rio_writen(fd, buf, strlen(buf));
+    sprintf(buf, "Server: Tiny Web Server\r\n");
+    rio_writen(fd, buf, strlen(buf));
 
+    if(fork()==0){
+        setenv("QUERY_STRING", cgiargs, 1);
+        dup2(fd, STDOUT_FILENO);
+        execve(filename, emptylist, NULL);
+    }
+    wait(NULL);
 }
 
 void doit(int fd){
